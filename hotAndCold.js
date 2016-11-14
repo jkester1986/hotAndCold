@@ -1,4 +1,61 @@
 // JavaScript Document
+var canvas = document.getElementById("theCanvas");
+
+var background = new Image();
+background.src = 'http://i246.photobucket.com/albums/gg93/micintexp/Pixel_Art%20Training/64_64_zps7bdeaf29.jpg';
+
+if(canvas.getContext){
+	var ctx = document.getElementById("theCanvas").getContext('2d');
+	ctx.drawImage(background, 50, 50);
+}
+else console.log("not compatible with canvas");
+
+var backgroundImg = {
+	'x':50,
+	'y':50,
+	'width':64,
+	'height':64
+};
+
+var render = function() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.drawImage(background, 0, 0);
+	
+	requestAnimationFrame(render);	
+}
+var requestAnimationFrame = function(callback) {
+	return setTimeout(callback, 1);
+	
+};
+
+
+var animate = function(prop, val, duration){//why are we setting up functions as variables?
+	
+	//setup calcs for step function
+	var start = new Date().getTime();
+	var end = start + duration;
+	var current = backgroundImg[prop];
+	var distance = val - current;
+	
+	var step = function() {
+		//get current progress
+		var timestamp = new Date().getTime();
+		var progress = Math.min((duration - (end - timestamp))/duration, 1);
+		
+		//update the background's property
+		backgroundImg[prop] = current + (distance*progress);
+		
+		//if the animation hasn't finished, repeat
+		if(progress < 1) requestAnimationFrame(step);
+		
+	};
+	
+	return step();
+};
+
+render();
+animate('x', 0, 1000);
+	
 
 //event listener for ess
 document.onkeydown = function(e) {
@@ -6,19 +63,29 @@ document.onkeydown = function(e) {
 	
 	switch (e.keyCode) {
 		case 37://left arrow
-			console.log("Left arrow was pressed");
+			move("left");
 			break;
 		case 38://up arrow
-			console.log("Up arrow was pressed");
+			move("up");
 			break;
 		case 39://right arrow
-			console.log("Right arrow was pressed");
+			move("right");
 			break;
 		case 40://down arrow
-			console.log("Down arrow was pressed");
+			move("down");
 			break;
 		default:
-			console.log("A non-directional key was pressed: " + e.keyCode);
 			break;
 	}
+};
+
+/*
+function move(direction) {
+	//save, do something, restore
+	window.setInterval(
+	ctx.save();
+	ctx.translate(1, 0);
+	ctx.drawImage(background, 0, 0);
+	ctx.restore();
 }
+*/

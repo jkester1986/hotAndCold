@@ -1,33 +1,72 @@
 // JavaScript Document
 var canvas = document.getElementById("theCanvas");
 
+var background = new Image();
+background.src = 'http://i246.photobucket.com/albums/gg93/micintexp/Pixel_Art%20Training/64_64_zps7bdeaf29.jpg';
 
 if(canvas.getContext){
 	var ctx = document.getElementById('theCanvas').getContext('2d');
 	//ctx.drawImage(background, 50, 50);
 	
-	var velocity = 100;
-	var background = new Image();
-	background.addEventListener('load', drawImage, false);
-	background.src = 'http://i246.photobucket.com/albums/gg93/micintexp/Pixel_Art%20Training/64_64_zps7bdeaf29.jpg';
+	var pattern = ctx.createPattern(background, "repeat-x");
 	
-	function drawImage(time) {
-		var framegap = time-lastRepaintTime;
-		lastRepaintTime = time;
+	var requestAnimationFrame = function(callback) {
+		return setTimeout(callback, 1);
 		
-		var translateX = velocity*(framegap/1000);
-		ctx.clearRect(0, 0, canvas.width, canvas.height);	
-		
-		var pattern = ctx.createPattern(background, "repeat-x");
-		ctx.fillStyle = pattern;
-		ctx.rect(translateX, 0, background.width, background.height);
+	};
+	
+
+	
+	var backgroundImg = {
+		'x':50,
+		'y':50,
+		'width':64,
+		'height':64,
+		'fillStyle':pattern
+	};
+	
+	
+
+	var render = function() {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.beginPath();
+		ctx.rect(backgroundImg.x, backgroundImg.y, backgroundImg.width, backgroundImg.height);
+		ctx.fillStyle = backgroundImg.fillStyle;
 		ctx.fill();
-		ctx.translate(-translateX, 0);
-		requestAnimationFrame(drawImage);
+		
+		requestAnimationFrame(render);	
 	}
+	render();
 	
-	var lastRepaintTime = window.performance.now();
 	
+	
+	
+	var animate = function(prop, val, duration){//why are we setting up functions as variables?
+		
+		//setup calcs for step function
+		var start = new Date().getTime();
+		var end = start + duration;
+		var current = backgroundImg[prop];
+		var distance = val - current;
+		
+		var step = function() {
+			//get current progress
+			var timestamp = new Date().getTime();
+			var progress = Math.min((duration - (end - timestamp))/duration, 1);
+			
+			//update the background's property
+			backgroundImg[prop] = current + (distance*progress);
+			
+			//if the animation hasn't finished, repeat
+			if(progress < 1) requestAnimationFrame(step);
+			
+		};
+		
+		return step();
+	};
+	
+	
+	animate('x', 0, 1000);
 }
 else console.log("not compatible with canvas");
 
@@ -35,7 +74,6 @@ else console.log("not compatible with canvas");
 	
 
 //event listener for ess
-/*
 document.onkeydown = function(e) {
 	e = e || window.event;
 	
@@ -56,7 +94,6 @@ document.onkeydown = function(e) {
 			break;
 	}
 };
-*/
 
 /*
 function move(direction) {

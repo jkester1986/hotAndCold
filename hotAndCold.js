@@ -6,16 +6,14 @@ background.src = 'http://i246.photobucket.com/albums/gg93/micintexp/Pixel_Art%20
 
 if(canvas.getContext){
 	var ctx = document.getElementById('theCanvas').getContext('2d');
-	//ctx.drawImage(background, 50, 50);
-	
-	var pattern = ctx.createPattern(background, "repeat-x");
+	var pattern = ctx.createPattern(background, 'repeat');
 	
 	var requestAnimationFrame = function(callback) {
 		return setTimeout(callback, 1);
-		
 	};
 	
-
+	
+	
 	
 	var backgroundImg = {
 		'x':50,
@@ -24,21 +22,18 @@ if(canvas.getContext){
 		'height':64,
 		'fillStyle':pattern
 	};
-	
-	
 
 	var render = function() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.beginPath();
+		
+		ctx.fillStyle = pattern;//why is this not working??????????
 		ctx.rect(backgroundImg.x, backgroundImg.y, backgroundImg.width, backgroundImg.height);
-		ctx.fillStyle = backgroundImg.fillStyle;
 		ctx.fill();
 		
 		requestAnimationFrame(render);	
 	}
 	render();
-	
-	
 	
 	
 	var animate = function(prop, val, duration){//why are we setting up functions as variables?

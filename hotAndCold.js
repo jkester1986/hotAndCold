@@ -54,35 +54,48 @@ if(canvas.getContext){
 			
 			//update the background's property
 			backgroundImg[prop] = current + (distance*progress);
-			
+                        
+                        /*
+                        ctx.save();
+                        ctx.translate(backgroundImg['x'], backgroundImg['y']);
+                        //ctx.rect(backgroundImg.x, backgroundImg.y, backgroundImg.width, backgroundImg.height);
+                        ctx.restore();
+			*/
+                       
 			//if the animation hasn't finished, repeat
 			if(progress < 1) requestAnimationFrame(step);
-			
+			else document.addEventListener('keydown', keyDownAction, false);
 		};
 		
 		return step();
 	};
 	
 	//event listener for key press
-        document.onkeydown = function(e) {
+        document.addEventListener('keydown', keyDownAction, false);
+        
+        function keyDownAction(e) {
             e = e || window.event;
 
             switch (e.keyCode) {
                 case 37://left arrow
-                        //console.log("left");
-                        animate('x', backgroundImg['x'] - 10, 100);
-                        break;
+                    //console.log("left");
+                    document.removeEventListener('keydown', keyDownAction, false);
+                    animate('x', backgroundImg['x'] - 64, 1000);
+                    break;
                 case 38://up arrow
-                        animate('y', backgroundImg['y'] - 10, 100);
-                        break;
+                    document.removeEventListener('keydown', keyDownAction, false);
+                    animate('y', backgroundImg['y'] - 64, 1000);
+                    break;
                 case 39://right arrow
-                        animate('x', backgroundImg['x'] + 10, 100);
-                        break;
+                    document.removeEventListener('keydown', keyDownAction, false);
+                    animate('x', backgroundImg['x'] + 64, 1000);
+                    break;
                 case 40://down arrow
-                        animate('y', backgroundImg['y'] + 10, 100);
-                        break;
+                    document.removeEventListener('keydown', keyDownAction, false);
+                    animate('y', backgroundImg['y'] + 64, 1000);
+                    break;
                 default:
-                        break;
+                    break;
             }
         };
         

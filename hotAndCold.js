@@ -6,14 +6,16 @@ background.src = 'http://i246.photobucket.com/albums/gg93/micintexp/Pixel_Art%20
 
 if(canvas.getContext){
 	var ctx = document.getElementById('theCanvas').getContext('2d');
-	var pattern = ctx.createPattern(background, 'repeat');
+	var pattern;
+        
+        background.onload = function(){
+            pattern = ctx.createPattern(background, 'repeat');
+        }
 	
+        
 	var requestAnimationFrame = function(callback) {
 		return setTimeout(callback, 1);
 	};
-	
-	
-	
 	
 	var backgroundImg = {
 		'x':50,
@@ -27,8 +29,9 @@ if(canvas.getContext){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.beginPath();
 		
-		ctx.fillStyle = pattern;//why is this not working??????????
+		
 		ctx.rect(backgroundImg.x, backgroundImg.y, backgroundImg.width, backgroundImg.height);
+                ctx.fillStyle = pattern;//why is this not working??????????
 		ctx.fill();
 		
 		requestAnimationFrame(render);	

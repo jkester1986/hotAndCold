@@ -60,35 +60,37 @@ if(canvas.getContext){
 		return step();
 	};
 	
-	
-	animate('x', 0, 1000);
+	//event listener for key press
+        document.onkeydown = function(e) {
+            e = e || window.event;
+
+            switch (e.keyCode) {
+                case 37://left arrow
+                        //console.log("left");
+                        animate('x', backgroundImg['x'] - 10, 100);
+                        break;
+                case 38://up arrow
+                        animate('y', backgroundImg['y'] - 10, 100);
+                        break;
+                case 39://right arrow
+                        animate('x', backgroundImg['x'] + 10, 100);
+                        break;
+                case 40://down arrow
+                        animate('y', backgroundImg['y'] + 10, 100);
+                        break;
+                default:
+                        break;
+            }
+        };
+        
+	//animate('x', 0, 1000);
 }
 else console.log("not compatible with canvas");
 
 
 	
 
-//event listener for ess
-document.onkeydown = function(e) {
-	e = e || window.event;
-	
-	switch (e.keyCode) {
-		case 37://left arrow
-			move("left");
-			break;
-		case 38://up arrow
-			move("up");
-			break;
-		case 39://right arrow
-			move("right");
-			break;
-		case 40://down arrow
-			move("down");
-			break;
-		default:
-			break;
-	}
-};
+
 
 /*
 function move(direction) {

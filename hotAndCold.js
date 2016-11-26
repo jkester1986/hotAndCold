@@ -20,15 +20,36 @@ if(canvas.getContext){
             backgroundInfo.y = 64;
 
             function move(x,y) {
-                    //save, do something, restore
-                    ctx.save();
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    console.log("background started at: " + backgroundInfo.x + " " + backgroundInfo.y);
-                    backgroundInfo.x += x;
-                    backgroundInfo.y += y;
-                    //TODO: if the backgrond is going to start moing off-screen, we need to do something idfferent
-                    ctx.drawImage(background, backgroundInfo.x, backgroundInfo.y);//draw the background to the new location
-                    ctx.restore();//restore canvas back to original location
+                    //console.log("moving");
+                    var loopTimer;
+                    xGoal = backgroundInfo.x + x;
+                    console.log("xGoal: " + xGoal);
+                    yGoal = backgroundInfo.y + y;
+                    console.log("yGoal: " + yGoal);
+                    
+                    //if animation has not completed
+                    function animate(){
+                        if(backgroundInfo.x === xGoal && backgroundInfo.y === yGoal){//if we hit the distance goal
+                            clearTimeout(loopTimer);
+                            console.log("congratulations, the animation completed!");
+                        }
+                        //else
+                        else {
+                            //save, do something, restore
+                            ctx.save();
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            //console.log("background started at: " + backgroundInfo.x + " " + backgroundInfo.y);
+                            backgroundInfo.x += x/32;
+                            backgroundInfo.y += y/32;
+                            console.log("background at: " + backgroundInfo.x + " " + backgroundInfo.y);
+                            //TODO: if the backgrond is going to start moing off-screen, we need to do something idfferent
+                            ctx.drawImage(background, backgroundInfo.x, backgroundInfo.y);//draw the background to the new location
+                            ctx.restore();//restore canvas back to original location
+                            var loopTimer = setTimeout(animate, 1);//function to call to iterate through the animation, and the speed at which the animation will take to complete
+                       }
+                    };
+                    
+                    animate();
             };
 
             //event listener for key press
@@ -39,7 +60,7 @@ if(canvas.getContext){
 
                 switch (e.keyCode) {
                     case 37://left arrow
-                        //console.log("left");
+                        console.log("left");
                         //document.removeEventListener('keydown', keyDownAction, false);
                         move(-64,0);
                         break;
